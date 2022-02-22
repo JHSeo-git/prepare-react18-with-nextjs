@@ -1,0 +1,16 @@
+# configure redis docker-compose
+version: '3.8'
+services:
+  redis:
+    image: redis:latest
+    command: redis-server /usr/local/conf/redis.conf
+    container_name: redis_boot
+    hostname: redis_boot
+    labels:
+      - 'name=redis'
+      - 'mode=standalone'
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data:/data
+      - ./conf/redis.conf:/usr/local/conf/redis.conf
