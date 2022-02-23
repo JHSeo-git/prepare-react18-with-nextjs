@@ -13,7 +13,7 @@ export type NoteUIProps = {
 
 export default function NoteUI({ note, isEditing, login }: NoteUIProps) {
   const { id, title, body, updated_at, created_by: createdBy } = note;
-  const updatedAt = new Date(updated_at);
+  const updatedAt = new Date(updated_at ?? 0);
 
   if (isEditing) {
     return <NoteEditor noteId={id} initialTitle={title} initialBody={body} />;

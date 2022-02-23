@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import NotePreview from './NotePreview';
 
 export type NoteEditorProps = {
-  noteId: string;
+  noteId: string | null;
   initialTitle: string;
   initialBody: string;
 };
@@ -18,8 +18,8 @@ export default function NoteEditor({
 
   const router = useRouter();
   const [isSaving, saveNote] = useMutation({
-    endpoint: noteId != null ? `/api/notes/${noteId}` : `/api/notes`,
-    method: noteId != null ? 'PUT' : 'POST',
+    endpoint: noteId !== null ? `/api/notes/${noteId}` : `/api/notes`,
+    method: noteId !== null ? 'PUT' : 'POST',
   });
   const [isDeleting, deleteNote] = useMutation({
     endpoint: `/api/notes/${noteId}`,
@@ -27,14 +27,14 @@ export default function NoteEditor({
   });
 
   // sync client text in editor between navigation
-  useEffect(() => {
-    if (title !== initialTitle) {
-      setTitle(initialTitle);
-    }
-    if (body !== initialBody) {
-      setBody(initialBody);
-    }
-  }, [title, body, initialTitle, initialBody]);
+  // useEffect(() => {
+  //   if (title !== initialTitle) {
+  //     setTitle(initialTitle);
+  //   }
+  //   if (body !== initialBody) {
+  //     setBody(initialBody);
+  //   }
+  // }, []);
 
   async function handleSave() {
     const payload = { title, body };

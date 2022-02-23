@@ -34,7 +34,7 @@ export type SidebarNoteProps = {
 };
 
 export default function SidebarNote({ note }: SidebarNoteProps) {
-  const updatedAt = new Date(note.updated_at);
+  const updatedAt = new Date(note.updated_at ?? 0);
   const lastUpdatedAt = isToday(updatedAt)
     ? format(updatedAt, 'h:mm bb')
     : format(updatedAt, 'M/d/yy');

@@ -18,7 +18,7 @@ export default function SearchField() {
         placeholder="Search"
         value={text}
         onChange={e => {
-          const newText = e.target.value;
+          const newText = e.target.value ?? '';
           setText(newText);
           refresh({ searchText: newText });
           startSearching(() => {});

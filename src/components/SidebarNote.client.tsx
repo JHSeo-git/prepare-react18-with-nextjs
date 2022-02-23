@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useTransition } from 'react';
 import { useRouter } from 'next/router';
 
 export type SidebarNoteProps = {
-  id: string;
+  id: string | null;
   title: string;
   children: React.ReactNode;
   expandedChildren: React.ReactNode;

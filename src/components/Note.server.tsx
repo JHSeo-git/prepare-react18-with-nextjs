@@ -1,10 +1,12 @@
-import type { Note } from '@/lib/types';
-import { useData } from '@/lib/use-fetch';
 import React from 'react';
+
+import { useData } from '@/lib/use-fetch';
+import type { Note } from '@/lib/types';
+
 import NoteUI from './NoteUI.server';
 
 export type NoteProps = {
-  selectedId?: string;
+  selectedId: string | null;
   isEditing: boolean;
   login?: string;
 };
@@ -12,7 +14,7 @@ export type NoteProps = {
 export default function Note({ selectedId, isEditing, login }: NoteProps) {
   const apiKey = `/api/notes/${selectedId}`;
   const note =
-    selectedId != null
+    selectedId !== null
       ? // eslint-disable-next-line react-hooks/rules-of-hooks
         useData<Note>(apiKey, key => fetch(key).then(r => r.json()), {
           revalidate: 1,
