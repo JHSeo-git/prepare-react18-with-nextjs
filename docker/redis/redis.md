@@ -1,5 +1,5 @@
 ```bash
-docker exec -it redis_boot /bin/sh
+docker exec -it redis_boot bash
 ```
 
 ## redis conf
