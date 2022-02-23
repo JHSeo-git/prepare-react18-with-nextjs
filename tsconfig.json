@@ -15,6 +15,7 @@
     "jsx": "preserve",
     "incremental": true,
     "downlevelIteration": true,
+    "types": ["react/next", "react-dom/next"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
