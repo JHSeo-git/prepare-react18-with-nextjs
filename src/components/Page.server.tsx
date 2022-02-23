@@ -1,10 +1,12 @@
-import Link from 'next/link';
 import { Suspense } from 'react';
+import Link from 'next/link';
+
 import AuthButton from './AuthButton.server';
 import NoteList from './NoteList.server';
-import NoteListSkeleton from './NoteListSkeleton.';
 
 import SearchField from './SearchField.client';
+
+import NoteListSkeleton from './NoteListSkeleton.';
 
 export type PageProps = {
   searchText?: string;
@@ -27,7 +29,7 @@ function Page({ searchText = '', login, children }: PageProps) {
       <div className="main">
         <input type="checkbox" className="sidebar-toggle" id="sidebar-toggle" />
         <section className="col sidebar">
-          <Link href={'/'}>
+          <Link href="/">
             <a className="link--unstyled">
               <section className="sidebar-header">
                 <img
