@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 
 import Note from '@/components/Note.server';
 import Page from '@/components/Page.server';
+
 import NoteSkeleton from '@/components/NoteSkeleton';
 
 import { getUser } from '@/lib/session';
@@ -14,12 +15,12 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-export type HomePageProps = {
+export type NotePageProps = {
   login?: string;
   searchText?: string;
 } & AppProps;
 
-function HomePage({ login, searchText = '', router }: HomePageProps) {
+export default function NotePage({ login, searchText, router }: NotePageProps) {
   const { id } = router.query;
   let selectedId = id ?? null;
 
@@ -35,5 +36,3 @@ function HomePage({ login, searchText = '', router }: HomePageProps) {
     </Page>
   );
 }
-
-export default HomePage;
