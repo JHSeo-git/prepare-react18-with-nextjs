@@ -1,6 +1,7 @@
 // eslint-disable-next-line @next/next/no-server-import-in-page
 import type { NextRequest } from 'next/server';
 import { NextApiRequest } from 'next';
+import { NextPageRequest } from '@/lib/types';
 
 export const userCookieKey = '_un';
 export const sessionKey = '_sess';
@@ -75,17 +76,24 @@ export function createDecrypt() {
   };
 }
 
-export function getSession(req: NextRequest | NextApiRequest) {
+type NextAllRequest = NextRequest | NextPageRequest | NextApiRequest;
+
+export function getSession(req: NextAllRequest) {
   const none = [null, null] as const;
   const value = req.cookies[userCookieKey];
+
   if (!value) return none;
+
   const index = value.indexOf(cookieSep);
+
   if (index === -1) return none;
+
   const user = value.slice(0, index);
   const session = value.slice(index + cookieSep.length);
+
   return [user, session] as const;
 }
 
-export function getUser(req: NextRequest | NextApiRequest) {
+export function getUser(req: NextAllRequest) {
   return getSession(req)[0];
 }
