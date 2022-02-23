@@ -1,5 +1,5 @@
 import { userCookieKey, cookieSep, createEncrypt } from '@/lib/session';
-import { type NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 
 const CLIENT_ID = process.env.OAUTH_CLIENT_KEY;
 const CLIENT_SECRET = process.env.OAUTH_CLIENT_SECRET;
