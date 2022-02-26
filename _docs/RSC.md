@@ -17,3 +17,47 @@
 ## RSC, SSR, CSR
 
 React Server Component와 Server Side Rendering(이하 SSR or SSG)는 별도로 생각해보는 것이 좋습니다.
+
+## next/streaming
+
+### unstable_useRefreshRoot
+
+Server Component는 서버사이드에서 렌더링되기 때문에 경우에 따라 서버에서 콘텐츠를 부분적으로 refresh해야 할 수 도 있습니다.
+
+예를 들어 검색을 위해 search bar(client component)가 있고 검색 결과를 위한 search result(RSC)가 있을 때, 입력하는 동안 검색 결과를 업데이트하고 특정 빈도(debounce)로 결과를 다시 렌더링하기를 원할 것입니다.(각 키를 입력하거나 debounce 시)
+
+`unstable_useRefreshRoot` hook은 깜박임 없이 부드럽게 React 트리를 다시 렌더링할 수 있는 API를 반환합니다. `refresh` 함수를 호출하면 트리가 다시 렌더링됩니다. 이 hook은 클라이언트 사이드에서만 사용할 수 있으며 그 순간(refresh)에는 서버 컴포넌트들에게만 영향을 미칠 것입니다.
+
+![refresh](./images/refresh.png)
+
+```js
+// pages/index.server.js
+import Search from '../components/search.client.js';
+import SearchResults from '../components/search-results.server.js';
+
+function Home() {
+  return (
+    <div>
+      <Search />
+      <SearchResults />
+    </div>
+  );
+}
+```
+
+```js
+// components/search.client.js
+import { unstable_useRefreshRoot as useRefreshRoot } from 'next/streaming';
+
+export default function Search() {
+  const refresh = useRefreshRoot();
+
+  return (
+    <SearchUI
+      onChange={() => {
+        refresh();
+      }}
+    />
+  );
+}
+```
