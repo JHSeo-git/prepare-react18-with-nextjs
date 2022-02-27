@@ -20,6 +20,86 @@ React Server Component와 Server Side Rendering(이하 SSR or SSG)는 별도로 
 
 ## next/streaming
 
+```html
+<div id="__next">
+  <!--$?-->
+  <template id="B:0"></template>
+  <!--/$-->
+</div>
+<div hidden id="S:0">
+  <template id="P:1"></template>
+</div>
+<div hidden id="S:1">
+  <div class="container">
+    <div class="banner">
+      <!-- components -->
+    </div>
+    <div class="main">
+      <!-- components -->
+      <section class="col sidebar">
+        <!-- components -->
+        <nav>
+          <!--$?-->
+          <template id="B:1"></template>
+          <!-- components -->
+          <!--/$-->
+        </nav>
+      </section>
+      <section class="col note-viewer">
+        <!--$-->
+        <div class="note--empty-state">
+          <span class="note-text--empty-state"
+            >Click a note on the left to view something! 🥺</span
+          >
+        </div>
+        <!--/$-->
+      </section>
+    </div>
+  </div>
+</div>
+```
+
+```js
+function $RS(a, b) {
+  a = document.getElementById(a);
+  b = document.getElementById(b);
+  for (a.parentNode.removeChild(a); a.firstChild; )
+    b.parentNode.insertBefore(a.firstChild, b);
+  b.parentNode.removeChild(b);
+}
+$RS('S:1', 'P:1');
+```
+
+```js
+function $RC(a, b) {
+  a = document.getElementById(a);
+  b = document.getElementById(b);
+  b.parentNode.removeChild(b);
+  if (a) {
+    a = a.previousSibling;
+    var f = a.parentNode,
+      c = a.nextSibling,
+      e = 0;
+    do {
+      if (c && 8 === c.nodeType) {
+        var d = c.data;
+        if ('/$' === d)
+          if (0 === e) break;
+          else e--;
+        else ('$' !== d && '$?' !== d && '$!' !== d) || e++;
+      }
+      d = c.nextSibling;
+      f.removeChild(c);
+      c = d;
+    } while (c);
+    for (; b.firstChild; ) f.insertBefore(b.firstChild, c);
+    a.data = '$';
+    a._reactRetry && a._reactRetry();
+  }
+}
+$RC('B:0', 'S:0');
+```
+
 ### unstable_useRefreshRoot
 
 Server Component는 서버사이드에서 렌더링되기 때문에 경우에 따라 서버에서 콘텐츠를 부분적으로 refresh해야 할 수 도 있습니다.
@@ -43,6 +123,20 @@ function Home() {
     </div>
   );
 }
+```
+
+### RSC response
+
+> `Request URL: http://localhost:3001/?__flight__=1`
+
+```js
+M1:{"id":"./node_modules/next/link.js","name":"default","chunks":[]}
+M2:{"id":"./src/components/SearchField.client.tsx","name":"default","chunks":[]}
+M3:{"id":"./src/components/EditButton.client.tsx","name":"default","chunks":[]}
+S4:"react.suspense"
+J0:["$","div",null,{"className":"container","children":[["$","div",null,{"className":"banner","children":["$","a",null,{"href":"https://nextjs.org/docs/advanced-features/react-18","target":"_blank","rel":"noopener noreferrer","children":"Learn more about using React Server Components in Next.js â"}]}],["$","div",null,{"className":"main","children":[["$","input",null,{"type":"checkbox","className":"sidebar-toggle","id":"sidebar-toggle"}],["$","section",null,{"className":"col sidebar","children":[["$","@1",null,{"href":"/","children":["$","a",null,{"className":"link--unstyled","children":["$","section",null,{"className":"sidebar-header","children":[["$","img",null,{"className":"logo","src":"/logo.svg","width":"22px","height":"20px","alt":"","role":"presentation"}],["$","strong",null,{"children":"React Notes"}]]}]}]}],["$","section",null,{"className":"sidebar-menu","role":"menubar","children":[["$","@2",null,{}],["$","a",null,{"href":"/note/edit/","className":"link--unstyled","children":["$","@3",null,{"login":"JHSeo-git","children":["Add",["$","img",null,{"src":"https://avatars.githubusercontent.com/JHSeo-git?s=40","alt":"User Avatar","title":"JHSeo-git","className":"avatar"}]]}]}]]}],["$","nav",null,{"children":["$","$4",null,{"fallback":["$","div",null,{"children":["$","ul",null,{"className":"notes-list skeleton-container","children":[["$","li",null,{"className":"v-stack","children":["$","div",null,{"className":"sidebar-note-list-item skeleton","style":{"height":"5em"}}]}],["$","li",null,{"className":"v-stack","children":["$","div",null,{"className":"sidebar-note-list-item skeleton","style":{"height":"5em"}}]}],["$","li",null,{"className":"v-stack","children":["$","div",null,{"className":"sidebar-note-list-item skeleton","style":{"height":"5em"}}]}]]}]}],"children":"@5"}]}]]}],["$","section",null,{"className":"col note-viewer","children":["$","$4",null,{"fallback":["$","div",null,{"className":"note skeleton-container","role":"progressbar","aria-busy":"true","children":[["$","div",null,{"className":"note-header","children":[["$","div",null,{"className":"note-title skeleton","style":{"height":"3rem","width":"65%","marginInline":"12px 1em"}}],["$","div",null,{"className":"skeleton skeleton--button","style":{"width":"8em","height":"2.5em"}}]]}],["$","div",null,{"className":"note-preview","children":[["$","div",null,{"className":"skeleton v-stack","style":{"height":"1.5em"}}],["$","div",null,{"className":"skeleton v-stack","style":{"height":"1.5em"}}],["$","div",null,{"className":"skeleton v-stack","style":{"height":"1.5em"}}],["$","div",null,{"className":"skeleton v-stack","style":{"height":"1.5em"}}],["$","div",null,{"className":"skeleton v-stack","style":{"height":"1.5em"}}]]}]]}],"children":["$","div",null,{"className":"note--empty-state","children":["$","span",null,{"className":"note-text--empty-state","children":"Click a note on the left to view something! ð¥º"}]}]}]}]]}]]}]
+M6:{"id":"./src/components/SidebarNote.client.tsx","name":"default","chunks":[]}
+J5:["$","ul",null,{"className":"notes-list","children":[["$","li","1645886396221",{"children":["$","@6",null,{"id":1645886396221,"title":"test...","expandedChildren":["$","p",null,{"className":"sidebar-note-excerpt","children":"test test test test test21 test testetetst testets react test is good isn't it ?"}],"children":["$","header",null,{"className":"sidebar-note-header","children":[["$","strong",null,{"children":"test..."}],["$","small",null,{"children":"2/26/22"}]]}]}]}],["$","li","1645625728521",{"children":["$","@6",null,{"id":1645625728521,"title":"So Good...","expandedChildren":["$","p",null,{"className":"sidebar-note-excerpt","children":"Oh... shit.. is very good... Isn't it? so good Verry good omg... const foo = bar; seonest good job... good..."}],"children":["$","header",null,{"className":"sidebar-note-header","children":[["$","strong",null,{"children":"So Good..."}],["$","small",null,{"children":"2/23/22"}]]}]}]}]]}]
 ```
 
 ```js
