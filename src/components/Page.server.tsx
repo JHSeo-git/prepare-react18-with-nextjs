@@ -6,7 +6,7 @@ import NoteList from './NoteList.server';
 
 import SearchField from './SearchField.client';
 
-import NoteListSkeleton from './NoteListSkeleton.';
+import NoteListSkeleton from './NoteListSkeleton';
 
 export type PageProps = {
   searchText?: string;
